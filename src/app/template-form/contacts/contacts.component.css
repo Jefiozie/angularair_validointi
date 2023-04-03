@@ -1,0 +1,17 @@
+:host {
+    display: block;
+    margin: 0 0 20px 0;
+    position: relative;
+    min-height: 2rem;
+  }
+  
+  /** don't show background color when host is invalid, we handle that on leaf nodes */
+  :host.ng-invalid {
+    background-color: unset;
+  }
+  
+  button {
+    right: -0.4rem;
+    top: -3rem;
+  }
+  
