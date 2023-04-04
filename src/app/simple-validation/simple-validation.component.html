@@ -1,3 +1,47 @@
-<p>
-    simple-validation works!
-    </p>
+<form
+  validationId="sample-data"
+  (ngSubmit)="onSubmit($any(form))"
+  #form="ngForm"
+>
+  <legend>Simple validation</legend>
+  <fieldset>
+    <label for="name">
+      <span>Your name</span>
+    </label>
+    <input
+      type="text"
+      name="name"
+      placeholder="Fill in your name"
+      [(ngModel)]="model.name"
+    />
+
+    <label for="email">
+      <span>Your email</span>
+    </label>
+    <input
+      type="text"
+      name="email"
+      placeholder="Fill in your email"
+      [(ngModel)]="model.email"
+    />
+    <label for="password">
+      <span>Your password</span>
+    </label>
+    <input
+      type="password"
+      name="password"
+      placeholder="Fill in a password"
+      [(ngModel)]="model.password"
+    />
+    <label for="confirm_password">
+      <span>Your confirm password</span>
+    </label>
+    <input
+      type="password"
+      name="confirmPassword"
+      placeholder="Fill in a password to confirm the password"
+      [(ngModel)]="model.confirmPassword"
+    />
+  </fieldset>
+  <input type="submit" value="Submit" [disabled]="form.invalid" />
+</form>

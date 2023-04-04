@@ -19,10 +19,10 @@ a {
   cursor: pointer;
 }
 
-:where(fieldset):has(*.ng-invalid) {
+/* :where(fieldset):has(*.ng-invalid) {
   border-color: var(--red-5);
   background-color: inherit;
-}
+} */
 
 :where(*):has(button.action) {
   /** make sure the parent of the action button has position relative */
@@ -32,9 +32,11 @@ a {
 :where(.ng-invalid):not(fieldset).ng-touched:focus {
   outline-color: var(--red-5);
   background-color: inherit;
+  color:white
 }
 :where(.ng-invalid):not(fieldset).ng-touched:not(form) {
-  background-color: var(--red-2)
+  background-color: var(--red-2);
+  color: white;
 }
 
 

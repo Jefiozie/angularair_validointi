@@ -19,6 +19,7 @@ export class ValidationErrorHookUpDirective implements OnDestroy {
   lastState = "";
 
   #change = (status: string) => {
+    if(!this.#model.dirty) return;
     const errors = this.#model.control.errors;
     if (errors) {
       Object.entries(errors).forEach(([key, value]) => {
