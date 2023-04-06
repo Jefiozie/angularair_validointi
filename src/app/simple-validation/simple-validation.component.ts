@@ -1,11 +1,11 @@
 import { CommonModule } from "@angular/common";
 import { Component, inject } from "@angular/core";
-import { FormsModule } from "@angular/forms";
+import { FormsModule,ValidationErrors } from "@angular/forms";
 import {
   ValidatorDirective,
   ValidatorRegistryService,
   VldntiControlDirective,
-  createVestAdapter,
+  createVestAdapter
 } from "@validointi/core";
 import { create, enforce, test } from "vest";
 import { ValidationErrorHookUpDirective } from "../util/hookup.directive";
@@ -16,6 +16,53 @@ interface Model {
   password: string;
   confirmPassword: string;
 }
+
+
+@Component({
+  selector: "app-template-form",
+  standalone: true,
+  imports: [
+    CommonModule,
+    FormsModule,
+    ValidatorDirective,
+    VldntiControlDirective,
+    ValidationErrorHookUpDirective,
+  ],
+  templateUrl: "./simple-validation.component.html",
+  styleUrls: ["./simple-validation.component.css"],
+})
+export class SimpleValidationComponent {
+  model = { name: "", email: "", password: "", confirmPassword: "" };
+  validator = async () => {
+    let result:ValidationErrors = {}
+    const m = this.model;
+    if (m.name.length<3) {
+      result['name'] = 'name must be at east 3 tokens';
+    }
+    if (m.password.length<3) {
+      result['password'] ='pasword should have at least 3 letters';
+    }
+
+    if (m.password !== m.confirmPassword) {
+      result['confirmPassword'] = 'Does not match password'
+    }
+
+    return result
+  }
+  #vr = inject(ValidatorRegistryService);
+  validate = this.#vr.registerValidator(
+    "sim[",
+    // this.validator
+    createVestAdapter(suite)
+  );
+
+
+  async onSubmit(data: any) {
+    const validationResult = await this.validate(data);
+    console.dir(validationResult);
+  }
+}
+
 
 const suite = create((data: Model = {} as Model, field?: string) => {
   test("name", "Name is required", () => {
@@ -50,30 +97,3 @@ const suite = create((data: Model = {} as Model, field?: string) => {
     enforce(data.confirmPassword).equals(data.password);
   });
 });
-
-@Component({
-  selector: "app-template-form",
-  standalone: true,
-  imports: [
-    CommonModule,
-    FormsModule,
-    ValidatorDirective,
-    VldntiControlDirective,
-    ValidationErrorHookUpDirective,
-  ],
-  templateUrl: "./simple-validation.component.html",
-  styleUrls: ["./simple-validation.component.css"],
-})
-export class SimpleValidationComponent {
-  #vr = inject(ValidatorRegistryService);
-  validate = this.#vr.registerValidator(
-    "sample-data",
-    createVestAdapter(suite)
-  );
-  model = { name: "", email: "", password: "", confirmPassword: "" };
-
-  async onSubmit(data: any) {
-    const validationResult = await this.validate(data);
-    console.dir(validationResult);
-  }
-}
